@@ -22,6 +22,8 @@ dependencies:
   dio: ^5.0.1
   dartz: ^0.10.1
   another_flushbar: ^1.12.29
+  salem_package:
+    git: https://github.com/SalemZakkar/SalemPackage.git
 dev_dependencies:
     flutter_test:
       sdk: flutter

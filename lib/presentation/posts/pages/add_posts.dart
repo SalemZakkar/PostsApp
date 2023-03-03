@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:posts_app/domain/posts/entities/post_entity.dart';
 import 'package:posts_app/presentation/blocs/add_edit_post_bloc/add_edit_post_bloc.dart';
 import 'package:posts_app/presentation/core/utils/validator.dart';
-import 'package:posts_app/presentation/core/widgets/screen_util.dart';
+import 'package:salem_package/enums/failure_type.dart';
+import 'package:salem_package/salem_package.dart';
 
 import '../../../injection.dart';
-import '../../core/utils/base_state.dart';
 
 class AddPostPage extends StatefulWidget {
   const AddPostPage({Key? key}) : super(key: key);
@@ -21,10 +21,22 @@ class _AddPostPageState extends State<AddPostPage> with ScreenUtil {
   TextEditingController title = TextEditingController();
   TextEditingController content = TextEditingController();
   GlobalKey<FormState> key = GlobalKey();
+  bool addButtonLoading = false;
   @override
   void dispose() {
     bloc.close();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    errorMessages = {
+      FailureType.networkError: "No Network",
+      FailureType.serverError: "Server Error",
+      FailureType.invalidArguments: "Error Data",
+      FailureType.unAuthorized: "Un Authorized"
+    };
+    super.initState();
   }
 
   @override
@@ -36,15 +48,21 @@ class _AddPostPageState extends State<AddPostPage> with ScreenUtil {
       body: BlocListener<AddEditPostBloc, BaseState>(
         listener: (context, state) {
           if (state.progress) {
-            showLoading(context);
+            setState(() {
+              addButtonLoading = true;
+            });
+          } else {
+            setState(() {
+              addButtonLoading = false;
+            });
           }
           if (state.fail) {
             stopLoading(context);
-            showErrorFlushMessage(context, state.failure!.message);
+            showErrorSnackMessage(context, state.failure!.type);
           }
           if (state.success) {
             stopLoading(context);
-            showSuccessFlushMessage(context, "Added Post Successfully");
+            showSuccessSnackMessage(context, "Added Post Successfully");
             context.router.pop();
           }
         },
@@ -91,24 +109,25 @@ class _AddPostPageState extends State<AddPostPage> with ScreenUtil {
                       },
                     ),
                   ),
+                  30.spaceHeight(),
+                  AnimatedButton(
+                      loading: addButtonLoading,
+                      height: 50,
+                      loadColor: Colors.white,
+                      width: MediaQuery.of(context).size.width,
+                      onPressed: () {
+                        if (key.currentState!.validate()) {
+                          bloc.add(AddPostEvent(
+                              entity: PostEntity(
+                                  title: title.text, body: content.text)));
+                        }
+                      },
+                      child: const Text("Add Post"))
                 ],
               ),
             ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (key.currentState!.validate()) {
-            FocusScope.of(context).unfocus();
-            bloc.add(AddPostEvent(
-                entity: PostEntity(
-                    body: content.text, title: title.text, userId: 1)));
-          }
-        },
-        backgroundColor: Theme.of(context).primaryColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-        child: const Icon(Icons.done),
       ),
     );
   }

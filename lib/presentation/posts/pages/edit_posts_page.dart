@@ -6,9 +6,9 @@ import 'package:posts_app/presentation/blocs/add_edit_post_bloc/add_edit_post_bl
 import 'package:posts_app/presentation/core/utils/validator.dart';
 import 'package:posts_app/presentation/core/widgets/error/error.dart';
 import 'package:posts_app/presentation/core/widgets/loading.dart';
-import 'package:posts_app/presentation/core/widgets/screen_util.dart';
-
-import '../../core/utils/base_state.dart';
+import 'package:salem_package/bloc/base_state.dart';
+import 'package:salem_package/enums/failure_type.dart';
+import 'package:salem_package/widgets/screen_util.dart';
 
 class EditPostsPage extends StatefulWidget {
   final int id;
@@ -27,6 +27,12 @@ class _EditPostsPageState extends State<EditPostsPage> with ScreenUtil {
   GlobalKey<FormState> key = GlobalKey();
   @override
   void initState() {
+    errorMessages = {
+      FailureType.networkError : "No Network",
+      FailureType.serverError : "Server Error",
+      FailureType.invalidArguments : "Error Data",
+      FailureType.unAuthorized : "Un Authorized"
+    };
     bloc.add(GetPostEvent(id: widget.id));
     super.initState();
   }
@@ -110,7 +116,8 @@ class _EditPostsPageState extends State<EditPostsPage> with ScreenUtil {
               );
             } else if (state.fail) {
               return DisplayErrorWidget(
-                  failure: state.failure!,
+                  type: state.failure!.type,
+                  message: errorMessages[state.failure?.type] ?? "",
                   retry: () {
                     bloc.add(GetPostEvent(id: widget.id));
                   });
@@ -126,12 +133,12 @@ class _EditPostsPageState extends State<EditPostsPage> with ScreenUtil {
               }
               if (state.success) {
                 stopLoading(context);
-                showSuccessFlushMessage(context, "Edited Post Successfully");
+                showSuccessSnackMessage(context, "Edited Post Successfully");
                 context.router.pop();
               }
               if (state.fail) {
                 stopLoading(context);
-                showErrorFlushMessage(context, state.failure!.message);
+                showErrorSnackMessage(context, state.failure!.type);
               }
             },
             child: loaded

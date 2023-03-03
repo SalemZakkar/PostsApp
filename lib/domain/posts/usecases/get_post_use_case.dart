@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
+import 'package:salem_package/models/failure.dart';
 
-import '../../core/entities/failure.dart';
 import '../entities/post_entity.dart';
 import '../repositories/post_repository.dart';
 

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:posts_app/domain/core/entities/failure.dart';
 import 'package:posts_app/presentation/core/widgets/error/no_network.dart';
+import 'package:salem_package/enums/failure_type.dart';
 
-class DisplayErrorWidget extends StatelessWidget {
-  final Failure failure;
+class DisplayErrorWidget extends StatelessWidget  {
+  final String message;
+  final FailureType type;
   final Function retry;
   const DisplayErrorWidget(
-      {Key? key, required this.failure, required this.retry})
+      {Key? key, required this.message, required this.retry , required this.type})
       : super(key: key);
 
   @override
@@ -14,11 +15,11 @@ class DisplayErrorWidget extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        getFailWidget(parseFail(failure)),
+        getFailWidget(type),
         const SizedBox(
           height: 20,
         ),
-        Text(failure.message),
+        Text(message),
         const SizedBox(
           height: 20,
         ),
@@ -42,22 +43,10 @@ class DisplayErrorWidget extends StatelessWidget {
   }
 }
 
-enum ErrorType { network, remote }
 
-ErrorType parseFail(Failure failure) {
-  if (failure is ServerFailure) {
-    if (failure.code == ServerErrorCode.noNetwork) {
-      return ErrorType.network;
-    } else {
-      return ErrorType.remote;
-    }
-  } else {
-    return ErrorType.remote;
-  }
-}
 
-Widget getFailWidget(ErrorType type) {
-  if (type == ErrorType.network) {
+Widget getFailWidget(FailureType type) {
+  if (type == FailureType.networkError) {
     return const NoNetwork();
   } else {
     return const Center();

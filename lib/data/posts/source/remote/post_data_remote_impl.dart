@@ -5,7 +5,7 @@ import 'package:posts_app/data/core/contants/endpoints.dart';
 import 'package:posts_app/data/core/models/base_repository.dart';
 import 'package:posts_app/data/posts/models/post_model.dart';
 import 'package:posts_app/data/posts/source/remote/post_data_remote.dart';
-import 'package:posts_app/domain/core/entities/failure.dart';
+import 'package:salem_package/models/failure.dart';
 
 @LazySingleton(as: PostDataRemote)
 class PostDataRemoteImpl extends BaseRepository implements PostDataRemote {

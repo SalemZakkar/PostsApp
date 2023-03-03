@@ -531,6 +531,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.0"
+  salem_package:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "1f460fb5a3adf920be7f4cfe91ea6d4274b8a6e7"
+      url: "https://github.com/SalemZakkar/SalemPackage.git"
+    source: git
+    version: "0.0.1"
   shelf:
     dependency: transitive
     description:

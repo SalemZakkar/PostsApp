@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:posts_app/domain/core/entities/failure.dart';
 import 'package:posts_app/domain/posts/entities/post_entity.dart';
 import 'package:posts_app/domain/posts/repositories/post_repository.dart';
+import 'package:salem_package/models/failure.dart';
 
 import '../source/remote/post_data_remote.dart';
 

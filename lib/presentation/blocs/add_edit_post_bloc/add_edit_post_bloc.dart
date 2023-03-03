@@ -3,8 +3,8 @@ import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 import 'package:posts_app/domain/posts/entities/post_entity.dart';
 import 'package:posts_app/domain/posts/usecases/get_post_use_case.dart';
-import 'package:posts_app/presentation/core/utils/base_state.dart';
 import 'package:posts_app/domain/posts/usecases/update_post_use_case.dart';
+import 'package:salem_package/bloc/base_state.dart';
 
 import '../../../domain/posts/usecases/add_post_use_case.dart';
 import '../../../injection.dart';

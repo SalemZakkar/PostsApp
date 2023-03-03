@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 
 ThemeData appTheme = ThemeData(
   primaryColor: const Color(0xFF4E6E81),
+  elevatedButtonTheme: const ElevatedButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: MaterialStatePropertyAll(Colors.white),
+          textStyle: MaterialStatePropertyAll(
+              TextStyle(color: Colors.white, fontSize: 20)),
+          overlayColor: MaterialStatePropertyAll(Colors.grey))),
   useMaterial3: true,
   appBarTheme: const AppBarTheme(
       backgroundColor: Color(0xFF4E6E81),

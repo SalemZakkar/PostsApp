@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:posts_app/data/posts/models/post_model.dart';
-import 'package:posts_app/domain/core/entities/failure.dart';
+import 'package:salem_package/models/failure.dart';
 
 abstract class PostDataRemote {
   Future<Either<Failure, List<PostModel>>> getAllPosts();

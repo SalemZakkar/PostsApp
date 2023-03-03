@@ -4,10 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:posts_app/domain/posts/entities/post_entity.dart';
 import 'package:posts_app/presentation/blocs/post_bloc/post_bloc.dart';
 import 'package:posts_app/presentation/core/routes/app_router.gr.dart';
-import 'package:posts_app/presentation/core/utils/base_state.dart';
 import 'package:posts_app/presentation/core/widgets/error/error.dart';
 import 'package:posts_app/presentation/core/widgets/loading.dart';
 import 'package:posts_app/presentation/posts/widgets/post_card.dart';
+import 'package:salem_package/enums/failure_type.dart';
+import 'package:salem_package/salem_package.dart';
 
 import '../../../injection.dart';
 
@@ -18,10 +19,16 @@ class PostsPage extends StatefulWidget {
   State<PostsPage> createState() => _PostsPageState();
 }
 
-class _PostsPageState extends State<PostsPage> {
+class _PostsPageState extends State<PostsPage> with ScreenUtil {
   PostBloc postBloc = getIt<PostBloc>()..add(GetPostsEvent());
   @override
   void initState() {
+    errorMessages = {
+      FailureType.networkError: "No Network",
+      FailureType.serverError: "Server Error",
+      FailureType.invalidArguments: "Error Data",
+      FailureType.unAuthorized: "Un Authorized"
+    };
     super.initState();
   }
 
@@ -37,7 +44,8 @@ class _PostsPageState extends State<PostsPage> {
             return const LoadingWidget();
           } else if (state.fail) {
             return DisplayErrorWidget(
-              failure: state.failure!,
+              type: state.failure!.type,
+              message: errorMessages[state.failure!.type] ?? "",
               retry: () {
                 postBloc.add(GetPostsEvent());
               },
